@@ -299,7 +299,7 @@ export default function Features() {
   return (
     <section
       id="features"
-      className="py-24 bg-[#0d0a25] dot-pattern relative overflow-hidden"
+      className="py-24 bg-section dot-pattern relative overflow-hidden"
     >
       {/* Ambient blobs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">

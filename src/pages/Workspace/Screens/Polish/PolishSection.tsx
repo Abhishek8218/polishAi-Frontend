@@ -1,19 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { Send, Copy, Sparkles, Bot, User, ChevronDown, Trash2 } from "lucide-react";
+import { getAllFrameworks } from "../Frameworks/services/frameworks.services";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { polishText } from "./services/polish.services";
+import { useLocation } from "react-router-dom";
 
 interface Message {
   role: "user" | "ai";
   text: string;
 }
-
-const frameworks = [
-  "Professional Clarity (Standard) — Clear & Concise",
-  "Executive Summary — Formal & Authoritative",
-  "Casual Tone — Friendly & Approachable",
-  "Academic Style — Scholarly & Precise",
-  "Creative Flair — Vivid & Engaging",
-  "Technical Depth — Detailed & Methodical",
-];
 
 const recentActivity = [
   { title: "Q3 Marketing Update", time: "2 mins ago" },
@@ -23,8 +18,11 @@ const recentActivity = [
 ];
 
 export default function PolishSection() {
+  const location = useLocation();
+  const defaultFrameworkId =  location.state?.frameworkId || '';
+  const queryClient = useQueryClient();
   const [inputText, setInputText] = useState("");
-  const [framework, setFramework] = useState(frameworks[0]);
+  const [selectedFrameworkId, setSelectedFrameworkId] = useState<string>(defaultFrameworkId);
   const [messages, setMessages] = useState<Message[]>([]);
   const [chatInput, setChatInput] = useState("");
   const [isPolishing, setIsPolishing] = useState(false);
@@ -36,7 +34,24 @@ export default function PolishSection() {
   const charCount = inputText.length;
   const wordCount = inputText.trim() ? inputText.trim().split(/\s+/).length : 0;
 
-  // Auto scroll chat
+  // Fetch frameworks
+  const { data: frameworksData } = useQuery({
+    queryKey: ['frameworks'],
+    queryFn: getAllFrameworks,
+    staleTime: 5 * 60 * 1000,
+  });
+ console.log("frameworksData", frameworksData);
+  const frameworks = frameworksData?.items || [];
+
+
+  // Auto-select first framework when data loads
+  useEffect(() => {
+    if (frameworks.length > 0 && !selectedFrameworkId) {
+      setSelectedFrameworkId(frameworks[0].id);
+    }
+  }, [frameworks, selectedFrameworkId]);
+
+  // Auto scroll to bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -52,20 +67,49 @@ export default function PolishSection() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  // Polish Mutation
+  const polishMutation = useMutation({
+    mutationFn: polishText,
+    onSuccess: (response) => {
+      const polishedText = response.data.polishedText;
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "ai",
+          text: polishedText,
+        },
+      ]);
+      queryClient.invalidateQueries({ queryKey: ['current-user'] });
+     
+    },
+    onError: (error: any) => {
+      let errorMessage = "Sorry, something went wrong while polishing your text. Please try again.";
+      if (error?.response?.status === 403) {
+      errorMessage = "❌ No credits remaining.\n\nPlease upgrade your plan or purchase more credits to continue polishing.";
+    }
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "ai",
+          text: errorMessage,
+        },
+      ]);
+    },
+  });
+
   const handlePolish = () => {
-    if (!inputText.trim()) return;
+    if (!inputText.trim() || !selectedFrameworkId) return;
 
     setIsPolishing(true);
 
-    setTimeout(() => {
-      const polished = `✨ Polished (${framework.split(" —")[0]}):\n\n${inputText
-        .replace(/\bi\b/g, "I")
-        .replace(/(\.\s*)([a-z])/g, (_, p, c) => `. ${c.toUpperCase()}`)
-        .trim()}`;
+    polishMutation.mutate({
+      text: inputText,
+      frameworkId: selectedFrameworkId,
+    });
 
-      setMessages([{ role: "ai", text: polished }]);
-      setIsPolishing(false);
-    }, 1400);
+    // Reset polishing state after mutation (onSuccess/onError will handle UI)
+    setIsPolishing(false);
   };
 
   const handleChatSend = () => {
@@ -75,12 +119,13 @@ export default function PolishSection() {
     setMessages((prev) => [...prev, { role: "user", text: userMsg }]);
     setChatInput("");
 
+    // TODO: Connect real AI chat if needed
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { role: "ai", text: `Refined response for: "${userMsg}"\n\nHere's a further polished version based on your request.` },
+        { role: "ai", text: `Got it! How would you like me to refine this further?` },
       ]);
-    }, 900);
+    }, 800);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -91,15 +136,16 @@ export default function PolishSection() {
   };
 
   const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text).catch(() => {});
+    navigator.clipboard.writeText(text);
   };
 
+  const selectedFramework = frameworks.find((f) => f.id === selectedFrameworkId);
+console.log("frameworks", frameworks);
   return (
     <div className="flex flex-1 overflow-hidden h-full">
       {/* Left Panel - Input */}
       <div className="flex flex-col w-full lg:w-[55%] lg:border-r border-[#2a2a2e] bg-[#111110] overflow-y-auto">
         <div className="p-5 lg:p-7 flex flex-col gap-5 min-h-full">
-
           {/* Textarea */}
           <div className="relative flex flex-col rounded-xl border border-[#2a2a2e] bg-[#161618] shadow-inner overflow-hidden flex-1 min-h-[300px]">
             <textarea
@@ -132,24 +178,26 @@ export default function PolishSection() {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[#161618] border border-[#2a2a2e] text-[14px] text-[#c4c4ce] hover:border-[#3a3a4a]"
               >
-                <span className="truncate">{framework}</span>
+                <span className="truncate">
+                  {selectedFramework ? selectedFramework.name : "Select a framework..."}
+                </span>
                 <ChevronDown size={18} className={`transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
               </button>
 
               {dropdownOpen && (
                 <div className="absolute top-full mt-1 w-full z-30 rounded-xl border border-[#2a2a2e] bg-[#1a1a1e] shadow-2xl overflow-hidden py-1">
-                  {frameworks.map((f) => (
+                  {frameworks.map((fw) => (
                     <button
-                      key={f}
+                      key={fw.id}
                       onClick={() => {
-                        setFramework(f);
+                        setSelectedFrameworkId(fw.id);
                         setDropdownOpen(false);
                       }}
                       className={`w-full text-left px-4 py-3 text-[13px] hover:bg-[#252538] transition-colors ${
-                        f === framework ? "bg-[#252538] text-white" : "text-[#9090a0]"
+                        fw.id === selectedFrameworkId ? "bg-[#252538] text-white" : "text-[#9090a0]"
                       }`}
                     >
-                      {f}
+                      {fw.name}
                     </button>
                   ))}
                 </div>
@@ -160,14 +208,14 @@ export default function PolishSection() {
           {/* Polish Button */}
           <button
             onClick={handlePolish}
-            disabled={isPolishing || !inputText.trim()}
+            disabled={isPolishing || !inputText.trim() || !selectedFrameworkId || polishMutation.isPending}
             className={`relative flex items-center justify-center gap-2.5 w-full py-3.5 rounded-xl text-[14px] font-semibold tracking-wide text-white transition-all ${
-              !inputText.trim()
-                ? "opacity-80 cursor-not-allowed bg-gradient-to-r from-[#0a6b60] to-[#0d8a7c]  shadow-lg shadow-[#0a6b60]/30"
+              !inputText.trim() || !selectedFrameworkId
+                ? "opacity-70 cursor-not-allowed bg-gradient-to-r from-[#0a6b60] to-[#0d8a7c]"
                 : "bg-gradient-to-r from-[#0a6b60] to-[#0d8a7c] hover:brightness-110 shadow-lg shadow-[#0a6b60]/30"
             }`}
           >
-            {isPolishing ? (
+            {polishMutation.isPending || isPolishing ? (
               <>
                 <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -208,13 +256,11 @@ export default function PolishSection() {
 
       {/* Right Panel - Output & Chat */}
       <div className="flex flex-col flex-1 bg-[#0e0e0f] overflow-hidden">
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#2a2a2e]">
           <p className="text-[10px] font-bold tracking-[1.2px] text-[#5c5c6e] uppercase">POLISHED OUTPUT &amp; AI CHAT</p>
           <Sparkles size={18} className="text-[#4a4a5a]" />
         </div>
 
-        {/* Messages */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
@@ -263,7 +309,7 @@ export default function PolishSection() {
         </div>
 
         {/* Chat Input */}
-        <div className="p-6 pt-2 border-t border-[#2a2a2e]">
+        {/* <div className="p-6 pt-2 border-t border-[#2a2a2e]">
           <div className="relative">
             <input
               type="text"
@@ -285,7 +331,7 @@ export default function PolishSection() {
               <Send size={18} />
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

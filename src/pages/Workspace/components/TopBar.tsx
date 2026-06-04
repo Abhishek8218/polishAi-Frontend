@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../../../services/api/endPoints";
 import ConfirmationModal from "../../../shared/components/ui/ConfirmationModel";
 import { useState } from "react";
+import { useAuthStore } from "../../../store/auth";
+import { getInitials } from "../../../shared/helpers/getInitials";
 
 interface TopBarProps {
   onMenuToggle: () => void;
@@ -67,6 +69,7 @@ const profileOptions: DropdownOption[] = [
 export default function TopBar({ onMenuToggle }: TopBarProps) {
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const user =  useAuthStore(state => state.user);
   // TanStack Query Mutation
   const logoutMutation = useMutation({
     mutationFn: logout,
@@ -107,16 +110,14 @@ const handleLogoutConfirm = () => {
         >
           <MenuIcon />
         </button>
-        <h1 className="text-[17px] font-bold text-white tracking-tight">
-          Polish
-        </h1>
+        
       </div>
 
       <div className="flex items-center gap-4">
         {/* Credits badge */}
         <div className="hidden sm:flex items-center px-3 py-1 rounded-full bg-[#222226] border border-[#2e2e38]">
           <span className="text-[11px] font-semibold tracking-[0.7px] text-[#8b8b9e] uppercase">
-            Credits: <span className="text-[#c8c5f8]">47 remaining</span>
+            Credits: <span className="text-[#c8c5f8]">{user?.creditsRemaining} remaining</span>
           </span>
         </div>
 
@@ -135,7 +136,7 @@ const handleLogoutConfirm = () => {
           className="border-none bg-transparent hover:bg-transparent p-1"
           trigger={
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#4a3fc8] to-[#2e2899] border border-[#4a3fc8]/50 flex items-center justify-center hover:cursor-pointer">
-              <span className="text-white text-[11px] font-bold">U</span>
+              <span className="text-white text-[14px] font-medium">{getInitials(user?.fullName || "")}</span>
             </div>
           }
         />

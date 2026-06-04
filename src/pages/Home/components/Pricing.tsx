@@ -26,7 +26,7 @@ export default function Pricing({ onSwitchView }: PricingProps) {
   };
 
   return (
-    <section id="pricing" className="py-24 bg-[#0d0a25] dot-pattern border-b border-outline-variant/10 relative overflow-hidden">
+    <section id="pricing" className="py-24 bg-section dot-pattern border-b border-outline-variant/10 relative overflow-hidden">
       {/* Decorative glows */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-secondary-teal/5 rounded-full blur-3xl -z-10"></div>
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary-indigo/5 rounded-full blur-3xl -z-10"></div>

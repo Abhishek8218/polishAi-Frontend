@@ -1,5 +1,6 @@
 import { ArrowUp, CreditCard, DraftingCompass, History, Settings, Sparkles, User } from "lucide-react";
 import type { NavItem } from "../types/workspace.types";
+import { PolishAiLogoImage } from "../../../shared/assets/shared.asset";
 
 const navItems: { label: NavItem; icon: React.ReactNode }[] = [
   { label: "Polish", icon: <Sparkles size={20} /> },
@@ -26,14 +27,15 @@ export default function Sidebar({ open, activeNav, onNavChange }: SidebarProps) 
       lg:translate-x-0
     `}>
       {/* Logo */}
-      <div className="flex items-center gap-3 px-5 pt-6 pb-8">
-        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#4a3fc8] to-[#2e2899] shadow-lg shadow-[#3d3a8c]/30">
+      <div className="flex items-center gap-3 px-5 pt-3 pb-8">
+        {/* <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#4a3fc8] to-[#2e2899] shadow-lg shadow-[#3d3a8c]/30">
           <Sparkles size={20} />
         </div>
         <div>
           <p className="text-[15px] font-bold text-white tracking-tight leading-none mb-0.5">Polish AI</p>
           <p className="text-[11px] text-[#5c5c6e] font-medium">AI Assistant</p>
-        </div>
+        </div> */}
+         <img src={PolishAiLogoImage} className="w-36" alt="Polish Ai" />
       </div>
 
       {/* Nav Items */}

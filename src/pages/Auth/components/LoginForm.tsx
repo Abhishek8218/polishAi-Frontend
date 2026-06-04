@@ -50,8 +50,6 @@ export default function LoginForm() {
     },
     onError: (error: any) => {
       console.error("login failed:", error);
-      // TODO: Show toast error
-      // toast.error(error?.response?.data?.message || "login failed");
     },
   });
 

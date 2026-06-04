@@ -3,6 +3,7 @@ import { Menu, X, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { API_ENDPOINTS } from "../../../services/api/endPoints";
+import { PolishAiLogoImage } from "../../../shared/assets/shared.asset";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,22 +37,15 @@ export default function Header() {
   };
 
   return (
-    <nav className="bg-[#0a081d]/85 backdrop-blur-md sticky top-0 z-50 border-b border-outline-variant/10 transition-all">
+    <nav className="bg-[#0a081d]/200 backdrop-blur-sm sticky top-0 z-50 border-b border-outline-variant/10 transition-all">
       <div className="flex justify-between items-center w-full px-6 md:px-10 py-4 max-w-7xl mx-auto">
         {/* Brand Logo */}
         <button
           onClick={() => navigate("/")}
           className="flex items-center gap-2 group focus:outline-none"
         >
-          <div className="w-8 h-8 rounded-lg bg-secondary-teal flex items-center justify-center text-white font-bold text-lg shadow-sm group-hover:scale-105 transition-transform">
-            P
-          </div>
-
-          <span className="font-sans font-bold text-lg tracking-tight text-white">
-            Polish <span className="text-[#8cf5e4]">AI</span>
-          </span>
+        <img src={PolishAiLogoImage} className="w-48" alt="Polish Ai" />
         </button>
-
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
           <a
@@ -98,7 +92,7 @@ export default function Header() {
         {/* CTA Buttons */}
         <div className="hidden md:flex items-center gap-4">
           <button
-            onClick={() => navigate("/auth")}
+            onClick={() => navigate(API_ENDPOINTS.AUTH.LOGIN)}
             className="font-sans font-semibold text-sm text-cbd5e1 text-on-surface-variant hover:text-[#8cf5e4] transition-colors focus:outline-none cursor-pointer"
           >
             Login
@@ -201,7 +195,7 @@ export default function Header() {
                 <button
                   onClick={() => {
                     setIsOpen(false);
-                    navigate("/auth");
+                    navigate(API_ENDPOINTS.AUTH.LOGIN);
                   }}
                   className="font-sans font-semibold text-sm text-[cbd5e1] hover:text-[#8cf5e4] text-center py-2 transition-colors focus:outline-none cursor-pointer"
                 >

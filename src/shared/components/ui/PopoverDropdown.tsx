@@ -25,7 +25,7 @@ export default function PopoverDropdown({
   selectedValue,
   placeholder = "Select...",
   className = "",
-  menuWidth = "w-56",
+  menuWidth = "",
 }: PopoverDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
@@ -119,7 +119,7 @@ export default function PopoverDropdown({
                 ${selectedValue === option.value ? "bg-[#252538] text-white" : "text-[#c4c4ce]"}
                 ${option.disabled ? "opacity-50 cursor-not-allowed" : ""}`}
             >
-              {option.icon && <span className="text-[#8b87f0]">{option.icon}</span>}
+              {option.icon && <span className="">{option.icon}</span>}
               <span>{option.label}</span>
             </button>
           ))}

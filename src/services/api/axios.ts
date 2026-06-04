@@ -7,6 +7,7 @@ import axios, {
  
 } from 'axios';
 import type { InternalAxiosRequestConfig, AxiosRequestConfig } from 'axios';
+import { API_ENDPOINTS } from './endPoints';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -48,7 +49,7 @@ api.interceptors.response.use(
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
 
-      window.location.href = '/auth';
+      window.location.href = API_ENDPOINTS.AUTH.LOGIN;
     }
 
     return Promise.reject(error);

@@ -32,7 +32,7 @@ export default function Hero({ onSwitchView }: HeroProps) {
   };
 console.log(heroAnimation);
   return (
-    <header className="relative overflow-hidden bg-[#0d0a25] dot-pattern pt-16 md:pt-24 pb-24 md:pb-32 border-b border-outline-variant/10">
+    <header className="relative overflow-hidden bg-section dot-pattern pt-16 md:pt-24 pb-24 md:pb-32 border-b border-outline-variant/10">
       <div className="max-w-7xl mx-auto px-6 md:px-10 grid md:grid-cols-12 gap-12 md:gap-8 items-center">
         {/* Hero Left Copy */}
         <motion.div

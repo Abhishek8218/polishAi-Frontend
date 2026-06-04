@@ -64,7 +64,7 @@ export default function HowItWorks() {
   };
 
   return (
-    <section id="how-it-works" className="py-20 bg-[#0d0a25] dot-pattern overflow-hidden ">
+    <section id="how-it-works" className="py-20 bg-section  dot-pattern overflow-hidden ">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         
         {/* Section Header */}

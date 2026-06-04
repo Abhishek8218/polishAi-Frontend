@@ -15,10 +15,10 @@ export default function CTA({ onSwitchView }: CTAProps) {
   };
 
   return (
-    <section id="cta" className="py-24 bg-[#050412] text-white overflow-hidden relative border-t border-outline-variant/10">
+    <section id="cta" className="py-24 bg-[#050412] dot-pattern  text-white overflow-hidden relative border-t border-outline-variant/10">
               
       {/* Decorative tiny grid lines */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+      {/* <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px]"></div> */}
       {/* Absolute Background Accent Glows */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-secondary-teal/5 rounded-full blur-[120px] -z-10"></div>
       <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-white/5 rounded-full blur-[100px] -z-10"></div>

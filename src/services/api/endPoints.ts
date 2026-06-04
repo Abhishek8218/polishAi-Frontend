@@ -18,7 +18,7 @@ export const API_ENDPOINTS = {
   },
 
   POLISH: {
-    CREATE: '/polish',
+    CREATE: '/workspace/polish',
   },
 
   HISTORY: {

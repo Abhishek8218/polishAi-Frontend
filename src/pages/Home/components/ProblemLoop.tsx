@@ -4,7 +4,7 @@ import { EASE_OUT_EXPO } from "../../../shared/utils/shared.const";
 
 export default function ProblemLoop() {
   return (
-    <section id="problem" className="py-24 bg-[#0d0a25] dot-pattern relative overflow-hidden border-b border-outline-variant/10">
+    <section id="problem" className="py-24 bg-section  dot-pattern relative overflow-hidden border-b border-outline-variant/10">
       {/* Visual background accents */}
       <div className="absolute -left-64 top-1/4 w-96 h-96 bg-secondary-teal/5 rounded-full blur-3xl -z-10"></div>
       <div className="absolute -right-64 bottom-1/4 w-96 h-96 bg-secondary-teal/5 rounded-full blur-3xl -z-10"></div>
