@@ -11,7 +11,8 @@ const UsageBar = ({ used, total, onUpgrade }: UsageBarProps) => {
   const isFull = used >= total
 
   return (
-    <div className="flex items-center gap-4 border border-[#2a2a2e] bg-[#161618] rounded-xl px-4 py-3">
+    <div className='flex flex-col border border-[#2a2a2e] bg-[#161618] rounded-xl px-4 py-3 gap-2'>
+ <div className="flex items-center gap-4 ">
       <span className="text-sm text-on-surface-variant whitespace-nowrap shrink-0">
         Usage: {used} of {total} used
       </span>
@@ -25,16 +26,27 @@ const UsageBar = ({ used, total, onUpgrade }: UsageBarProps) => {
         />
       </div>
 
-      <span className="text-sm text-on-surface-variant whitespace-nowrap shrink-0">
+      <span className="hidden sm:block text-sm text-on-surface-variant whitespace-nowrap shrink-0">
         Need more slots ?{' '}
         <button
           onClick={onUpgrade}
-          className="font-semibold text-secondary-teal hover:underline focus:outline-none"
+          className=" font-semibold text-secondary-teal hover:underline focus:outline-none"
         >
           Upgrade →
         </button>
       </span>
     </div>
+       <span className=" sm:hidden  text-sm text-on-surface-variant whitespace-nowrap shrink-0">
+        Need more slots ?{' '}
+        <button
+          onClick={onUpgrade}
+          className=" font-semibold text-secondary-teal hover:underline focus:outline-none"
+        >
+          Upgrade →
+        </button>
+      </span>
+    </div>
+   
   )
 }
 

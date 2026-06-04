@@ -65,7 +65,7 @@ export default function PolishHistory() {
     <div className="  p-6">
       <div className="mx-auto max-w-5xl">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col sm:flex-row items-start justify-between gap-4">
           <div>
             <h1 className="text-3xl font-medium text-white">Polish History</h1>
             <p className="text-on-surface-variant mt-1">View your text refinement history</p>

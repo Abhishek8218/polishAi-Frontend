@@ -87,7 +87,7 @@ const Frameworks = () => {
     <>
       <div className="p-6 space-y-6">
         {/* Header */}
-        <div className="flex flex-row justify-between items-start w-full gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start w-full gap-4">
           <div className="flex flex-col gap-0.5">
             <h1 className="text-[28px] font-medium text-on-surface leading-tight">
               My Frameworks
@@ -96,7 +96,7 @@ const Frameworks = () => {
               Custom writing structures and style guides for your AI assistant.
             </p>
           </div>
-          <div className="shrink-0 self-end">
+          <div className="shrink-0 self-start">
             <Button
               icon={<Plus size={16} />}
               disabled={frameworkSlotsFilled}
