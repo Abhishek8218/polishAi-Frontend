@@ -10,6 +10,7 @@ import ConfirmationModal from "../../../shared/components/ui/ConfirmationModel";
 import { useState } from "react";
 import { useAuthStore } from "../../../store/auth";
 import { getInitials } from "../../../shared/helpers/getInitials";
+import CreditsTimer from "../../../shared/components/ui/CreditResetTimer";
 
 interface TopBarProps {
   onMenuToggle: () => void;
@@ -115,11 +116,34 @@ const handleLogoutConfirm = () => {
 
       <div className="flex items-center gap-4">
         {/* Credits badge */}
-        <div className="hidden sm:flex items-center px-3 py-1 rounded-full bg-[#222226] border border-[#2e2e38]">
-          <span className="text-[11px] font-semibold tracking-[0.7px] text-[#8b8b9e] uppercase">
-            Credits: <span className="text-[#c8c5f8]">{user?.creditsRemaining} remaining</span>
-          </span>
-        </div>
+       <div className="hidden sm:flex items-center px-3 py-1 rounded-full bg-[#222226] border border-[#2e2e38]">
+  {user?.creditsRemaining === 0 &&
+  user?.creditsResetDate ? (
+    <span className="text-[11px] font-semibold tracking-[0.7px] uppercase">
+      <span className="text-red-400">
+        0 Credits
+      </span>
+
+      <span className="mx-2 text-[#4a4a57]">
+        •
+      </span>
+
+      <span className="text-[#ffb86c]">
+        Resets in{" "}
+        <CreditsTimer
+          resetDate={user.creditsResetDate}
+        />
+      </span>
+    </span>
+  ) : (
+    <span className="text-[11px] font-semibold tracking-[0.7px] text-[#8b8b9e] uppercase">
+      Credits:{" "}
+      <span className="text-[#c8c5f8]">
+        {user?.creditsRemaining} remaining
+      </span>
+    </span>
+  )}
+</div>
 
         {/* Bell */}
         <button className="relative text-[#5c5c6e] hover:text-[#a0a0b4] transition-colors">

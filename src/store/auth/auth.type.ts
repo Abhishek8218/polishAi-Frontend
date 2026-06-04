@@ -5,6 +5,7 @@ export interface User {
   avatarUrl: string | null;
   plan: 'FREE' | 'PRO' | 'BUSINESS';
   creditsRemaining: number;
+  creditsResetDate: string | null;
   isEmailVerified: boolean;
   createdAt: string;
 }

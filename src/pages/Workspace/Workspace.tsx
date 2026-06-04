@@ -10,9 +10,14 @@ import Frameworks from "./Screens/Frameworks/Frameworks";
 import { useCurrentUser } from "../../shared/hooks/useCurrentUser";
 import { useAuthStore } from "../../store/auth";
 import History from "./Screens/History/History";
+import ComingSoon from "../../shared/components/ui/ComingSoon";
 
-
-export type NavItem = "Polish" | "Frameworks" | "History" | "Subscription" | "Settings";
+export type NavItem =
+  | "Polish"
+  | "Frameworks"
+  | "History"
+  | "Subscription"
+  | "Settings";
 
 const navToPath: Record<NavItem, string> = {
   Polish: "polish",
@@ -28,9 +33,7 @@ export default function Workspace() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: user } = useCurrentUser();
 
-  const setUser = useAuthStore(
-    (state) => state.setUser
-  );
+  const setUser = useAuthStore((state) => state.setUser);
 
   useEffect(() => {
     if (user) {
@@ -48,28 +51,14 @@ export default function Workspace() {
     if (path === "settings") return "Settings";
     return "Polish"; // default
   };
+const activeNav = getActiveNavFromPath();
 
-  const [activeNav, setActiveNav] = useState<NavItem>(getActiveNavFromPath());
+const handleNavChange = (item: NavItem) => {
+  navigate(`/workspace/${navToPath[item]}`);
+  setSidebarOpen(false);
+};
 
-  // Sync URL with activeNav when it changes
-  useEffect(() => {
-    const currentPath = location.pathname.split("/").pop();
-    const expectedPath = navToPath[activeNav];
-
-    if (currentPath !== expectedPath) {
-      navigate(`/workspace/${expectedPath}`, { replace: true });
-    }
-  }, [activeNav, navigate, location.pathname]);
-
-  // Update activeNav when URL changes (back/forward button)
-  useEffect(() => {
-    setActiveNav(getActiveNavFromPath());
-  }, [location.pathname]);
-
-  const handleNavChange = (item: NavItem) => {
-    setActiveNav(item);
-    setSidebarOpen(false);
-  };
+  
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#111110] font-sans">
@@ -95,10 +84,26 @@ export default function Workspace() {
           <div className="flex flex-1 flex-col overflow-x-hidden">
             <Routes>
               <Route path="polish" element={<PolishSection />} />
-              <Route path="frameworks" element={<Frameworks/>} />
-              <Route path="history" element={<History/>} />
-              <Route path="subscription" element={<div>Subscription</div>} />
-              <Route path="settings" element={<div>Settings</div>} />
+              <Route path="frameworks" element={<Frameworks />} />
+              <Route path="history" element={<History />} />
+              <Route
+                path="subscription"
+                element={
+                  <ComingSoon
+                    title="Subscription Management"
+                    description="Manage billing, plans, invoices and credit usage."
+                  />
+                }
+              />
+              <Route
+                path="settings"
+                element={
+                  <ComingSoon
+                    title="Settings"
+                    description="Customize your profile, security and notifications."
+                  />
+                }
+              />
               <Route path="*" element={<PolishSection />} /> {/* fallback */}
             </Routes>
           </div>

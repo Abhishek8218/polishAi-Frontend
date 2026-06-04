@@ -8,6 +8,7 @@ import { signupSchema, type TSignupFormData } from "../schemas/signup.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../../../services/api/endPoints";
+import toast from "react-hot-toast";
 
 
 export default function RegisterForm() {
@@ -27,16 +28,15 @@ export default function RegisterForm() {
   const signupMutation = useMutation({
     mutationFn: signup,
     onSuccess: (data) => {
-      console.log("Signup successful:", data);
-      // TODO: Handle success (redirect, toast, etc.)
-      reset(); // reset form
-      // Example: navigate to login or dashboard
-      // navigate('/login');
+      reset();
+      toast.success("Signup successful");
+      navigate(API_ENDPOINTS.AUTH.LOGIN);
+
     },
     onError: (error: any) => {
       console.error("Signup failed:", error);
       // TODO: Show toast error
-      // toast.error(error?.response?.data?.message || "Signup failed");
+      toast.error(error?.response?.data?.message || "Signup failed");
     },
   });
 
@@ -147,7 +147,7 @@ console.log("dta", data);
                       name="fullName"
                       register={register}
                       placeholder="Enter your full name"
-                      error={errors.password}
+                      error={errors.fullName}
                       
                     />
 

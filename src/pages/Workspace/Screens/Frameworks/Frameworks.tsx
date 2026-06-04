@@ -16,6 +16,7 @@ import { SubscriptionPlan } from '../../../../shared/types/type';
 import ConfirmationModal from '../../../../shared/components/ui/ConfirmationModel';
 import { useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS } from '../../../../services/api/endPoints';
+import toast from 'react-hot-toast';
 
 const Frameworks = () => {
   const navigate = useNavigate();
@@ -41,9 +42,10 @@ const Frameworks = () => {
       setShowDeleteModal(false);
       setFrameworkToDelete(null);
     },
+
     onError: (error) => {
       console.error('Failed to delete framework:', error);
-      // You can add toast notification here
+      toast.error('Failed to delete framework');  
     },
   });
 
@@ -60,6 +62,7 @@ const Frameworks = () => {
   const closeDrawer = () => {
     setDrawerOpen(false);
     setEditingFrameworkId(null);
+    toast.success('Framework saved successfully');
   };
 
   const handleDeleteClick = (id: string) => {

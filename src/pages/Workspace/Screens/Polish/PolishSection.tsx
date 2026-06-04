@@ -1,24 +1,26 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Copy, Sparkles, Bot, User, ChevronDown, Trash2 } from "lucide-react";
+import { Copy, Sparkles, Bot, User, ChevronDown, Trash2 } from "lucide-react";
 import { getAllFrameworks } from "../Frameworks/services/frameworks.services";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { polishText } from "./services/polish.services";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface Message {
   role: "user" | "ai";
   text: string;
 }
 
-const recentActivity = [
-  { title: "Q3 Marketing Update", time: "2 mins ago" },
-  { title: "Client Proposal", time: "1 hour ago" },
-  { title: "Team Sync Notes", time: "3 hours ago" },
-  { title: "Product Roadmap", time: "Yesterday" },
-];
+// const recentActivity = [
+//   { title: "Q3 Marketing Update", time: "2 mins ago" },
+//   { title: "Client Proposal", time: "1 hour ago" },
+//   { title: "Team Sync Notes", time: "3 hours ago" },
+//   { title: "Product Roadmap", time: "Yesterday" },
+// ];
 
 export default function PolishSection() {
   const location = useLocation();
+  const navigate = useNavigate();
   const defaultFrameworkId =  location.state?.frameworkId || '';
   const queryClient = useQueryClient();
   const [inputText, setInputText] = useState("");
@@ -95,6 +97,7 @@ export default function PolishSection() {
           text: errorMessage,
         },
       ]);
+      toast.error("Sorry, something went wrong while polishing your text. Please try again.");
     },
   });
 
@@ -186,7 +189,10 @@ console.log("frameworks", frameworks);
 
               {dropdownOpen && (
                 <div className="absolute top-full mt-1 w-full z-30 rounded-xl border border-[#2a2a2e] bg-[#1a1a1e] shadow-2xl overflow-hidden py-1">
-                  {frameworks.map((fw) => (
+                  {
+                  
+
+          frameworks.length > 0 ?        frameworks.map((fw) => (
                     <button
                       key={fw.id}
                       onClick={() => {
@@ -199,7 +205,13 @@ console.log("frameworks", frameworks);
                     >
                       {fw.name}
                     </button>
-                  ))}
+                  ))
+                  
+                  :
+                  <div className="w-full text-left px-4 py-3 text-[14px] text-[#9090a0]">
+                      No frameworks found. <span  onClick={()=> navigate("/workspace/frameworks")} className="text-white text-[14px] cursor-pointer hover:underline">Click here to add one</span>
+                    </div>
+                  }
                 </div>
               )}
             </div>
@@ -209,7 +221,7 @@ console.log("frameworks", frameworks);
           <button
             onClick={handlePolish}
             disabled={isPolishing || !inputText.trim() || !selectedFrameworkId || polishMutation.isPending}
-            className={`relative flex items-center justify-center gap-2.5 w-full py-3.5 rounded-xl text-[14px] font-semibold tracking-wide text-white transition-all ${
+            className={`relative flex items-center justify-center gap-2.5 w-full py-3.5 rounded-xl text-[14px] font-semibold tracking-wide text-white transition-all hover:cursor-pointer ${
               !inputText.trim() || !selectedFrameworkId
                 ? "opacity-70 cursor-not-allowed bg-gradient-to-r from-[#0a6b60] to-[#0d8a7c]"
                 : "bg-gradient-to-r from-[#0a6b60] to-[#0d8a7c] hover:brightness-110 shadow-lg shadow-[#0a6b60]/30"
@@ -239,8 +251,8 @@ console.log("frameworks", frameworks);
               <p className="text-[10px] font-bold tracking-[1.2px] text-[#5c5c6e] uppercase">RECENT ACTIVITY</p>
               <button className="text-[12px] text-[#5c5c8a] hover:text-[#8b87f0]">View all</button>
             </div>
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
-              {recentActivity.map((item, i) => (
+            <div className="flex justify-center-safe gap-3 overflow-x-auto pb-2 scrollbar-none">
+              {/* {recentActivity.map((item, i) => (
                 <div
                   key={i}
                   className="shrink-0 w-[170px] p-3.5 rounded-xl bg-[#161618] border border-[#222226] hover:border-[#2e2e3a] cursor-pointer transition-colors"
@@ -248,7 +260,8 @@ console.log("frameworks", frameworks);
                   <p className="text-[12px] font-semibold text-[#c4c4ce] truncate">{item.title}</p>
                   <p className="text-[11px] text-[#3d3d4a] mt-1">{item.time}</p>
                 </div>
-              ))}
+              ))} */}
+              <p className="text-on-surface-variant text-[14px] align-middle">Coming soon</p>
             </div>
           </div>
         </div>

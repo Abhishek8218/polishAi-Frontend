@@ -71,13 +71,13 @@ export function HistoryItem({ item }: HistoryItemProps) {
       </div>
         {/* Actions */}
         <div className="flex flex-col items-end self-center gap-3 pt-1">
-          <Button 
+          {/* <Button 
            icon={ <Eye className="h-4 w-4" />}
            // className="flex items-center gap-2 rounded-xl text-white border border-[#2a2a2e] bg-[#161618] px-5 py-2.5 text-sm hover:border-[#3a3a4a] hover:bg-[#1a1a1e] transition-all group-hover:border-[#4a4a5a]"
           >
            
             View
-          </Button>
+          </Button> */}
         </div>
     </div>
   );

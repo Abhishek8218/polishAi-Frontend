@@ -7,6 +7,7 @@ import { ArrowRight, Eye } from 'lucide-react';
 import { getAllHistory } from './services/history.services';
 import { HistorySkeleton } from './components/HistorySekeleton';
 import { HistoryItem } from './components/HistoryItem';
+import toast from 'react-hot-toast';
 
 
 interface HistoryItemType {
@@ -52,6 +53,7 @@ export default function PolishHistory() {
   };
 
   if (error) {
+    toast.error('Failed to load history. Please try again.');
     return (
       <div className="flex h-[400px] items-center justify-center text-red-400">
         Failed to load history. Please try again.
@@ -60,7 +62,7 @@ export default function PolishHistory() {
   }
 
   return (
-    <div className=" bg-[#0c0c0d] p-6">
+    <div className="  p-6">
       <div className="mx-auto max-w-5xl">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
@@ -70,11 +72,7 @@ export default function PolishHistory() {
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 rounded-full border border-[#2a2a2e] bg-[#161618] px-4 py-2 text-sm">
-              <span className="text-on-surface-variant">All Frameworks</span>
-              <ArrowRight className="h-4 w-4" />
-            </div>
-            
+       
             <div className="relative w-80">
               <input
                 type="text"
@@ -99,8 +97,8 @@ export default function PolishHistory() {
           {isLoading ? (
             <HistorySkeleton />
           ) : allItems.length === 0 ? (
-            <div className="flex h-64 flex-col items-center justify-center text-on-surface-variant">
-              <div className="text-6xl mb-4 opacity-40">📜</div>
+            <div className="flex h-fit flex-col items-center justify-center text-on-surface-variant">
+
               <p>No history yet</p>
             </div>
           ) : (

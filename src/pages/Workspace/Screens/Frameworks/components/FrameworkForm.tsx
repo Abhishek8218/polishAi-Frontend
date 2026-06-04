@@ -20,6 +20,7 @@ import {
 } from '../services/frameworks.services';
 
 import { createFrameworkSchema, type CreateFrameworkInput, type UpdateFrameworkInput } from '../type';
+import toast from 'react-hot-toast';
 
 const TONE_OPTIONS = [
   { label: 'Neutral', value: 'NEUTRAL' },
@@ -117,6 +118,10 @@ const FrameworkForm = ({ frameworkId, defaultValues, onSuccess, onCancel }: Fram
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['frameworks'] });
       onSuccess?.(data);
+      
+    },
+    onError: (error:any) => {
+      toast.error(error?.response?.data?.message || 'Failed to create framework');
     },
   });
 

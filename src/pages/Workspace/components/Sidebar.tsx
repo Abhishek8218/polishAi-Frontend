@@ -52,7 +52,7 @@ export default function Sidebar({ open, activeNav, onNavChange }: SidebarProps) 
                 ${isActive
                   ? "bg-[#252538] text-white"
                   : "text-[#6b6b7e] hover:bg-[#1e1e26] hover:text-[#a0a0b4]"
-                }
+                } hover:cursor-pointer
               `}
             >
               <span className={`transition-colors duration-150 ${isActive ? "text-[#8b87f0]" : "group-hover:text-[#8b87f0]"}`}>

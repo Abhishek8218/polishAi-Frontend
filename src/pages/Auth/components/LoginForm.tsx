@@ -8,6 +8,7 @@ import { loginSchema, type TLoginFormData } from "../schemas/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../../../services/api/endPoints";
+import toast from "react-hot-toast";
 
 
 export default function LoginForm() {
@@ -43,19 +44,20 @@ export default function LoginForm() {
         localStorage.setItem("user", JSON.stringify(userData.user));
       }
 
-      reset(); // Reset form
-
+      reset(); 
+toast.success("Login successful");
       // Redirect to dashboard (or home)
       navigate(API_ENDPOINTS.WORKSPACE); // Change this to your actual dashboard route
     },
     onError: (error: any) => {
       console.error("login failed:", error);
+      if(error?.response?.status === 401) {toast.error("Please check your email and password");}
+      toast.error(error?.response?.data?.message || "Login failed");
     },
   });
 
 
   const handleloginSubmit = (data: TLoginFormData) => {
-console.log("dta", data);
     loginMutation.mutate({  
       email: data.email,
       password: data.password,

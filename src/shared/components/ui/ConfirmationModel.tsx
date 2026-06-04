@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { AlertTriangle, X } from "lucide-react";
+import Button from "./Button";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -39,13 +40,13 @@ export default function ConfirmationModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="bg-[#1a1a1e] border border-[#2a2a2e] rounded-3xl w-full max-w-md mx-4 overflow-hidden shadow-2xl">
+      <div className="bg-[#1a1a1e] border border-[#2a2a2e] rounded-lg w-full max-w-md mx-4 overflow-hidden shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#2a2a2e]">
           <div className="flex items-center gap-3">
             {variant === "danger" && (
               <div className="w-9 h-9 rounded-full bg-red-500/10 flex items-center justify-center">
-                <AlertTriangle size={20} className="text-red-500" />
+                <AlertTriangle size={20} className="text-red-600" />
               </div>
             )}
             <h2 className="text-xl font-semibold text-white">{title}</h2>
@@ -65,25 +66,23 @@ export default function ConfirmationModal({
 
         {/* Actions */}
         <div className="flex gap-3 px-6 py-5 border-t border-[#2a2a2e] bg-[#161618]">
-          <button
+          <Button
             onClick={onClose}
             disabled={isLoading}
+            color="#2a2a2e"
             className="flex-1 py-3.5 rounded-2xl border border-[#2a2a2e] text-white font-medium hover:bg-[#222226] transition-colors"
           >
             {cancelText}
-          </button>
+          </Button>
 
-          <button
+          <Button
             onClick={onConfirm}
             disabled={isLoading}
-            className={`flex-1 py-3.5 rounded-2xl font-semibold transition-all ${
-              variant === "danger"
-                ? "bg-red-600 hover:bg-red-700 text-white"
-                : "bg-[#4a3fc8] hover:bg-[#3a35a0] text-white"
-            }`}
+            color="#FF0000"
+            className="flex-1 py-3.5"
           >
             {isLoading ? "Processing..." : confirmText}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
