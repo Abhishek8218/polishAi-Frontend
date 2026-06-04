@@ -1,6 +1,6 @@
 
 import PolishAiDashboard from  "../../assets/PolishAiDashboard.png";
-import PolishAiHero from "../../assets/PolishHero.svg";
+import PolishAiHero from "../../assets/polishHero.svg";
 import PolishAiLogo from "../../assets/polishLogo.png";
 
 
