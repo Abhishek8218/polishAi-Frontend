@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Layers, Zap, Sliders, History, Users, CreditCard } from "lucide-react";
+import { Layers, Zap, Sliders, History, CreditCard } from "lucide-react";
 import {
   motion,
   useMotionValue,
