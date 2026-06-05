@@ -74,10 +74,11 @@ export default function TopBar({ onMenuToggle }: TopBarProps) {
   // TanStack Query Mutation
   const logoutMutation = useMutation({
     mutationFn: logout,
-    onSuccess: (data) => {      
-      navigate(API_ENDPOINTS.AUTH.LOGIN);
+    onSuccess: (data) => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");      
+      navigate(API_ENDPOINTS.AUTH.LOGIN);  
     },
     onError: (error: any) => {
       console.error("login failed:", error);

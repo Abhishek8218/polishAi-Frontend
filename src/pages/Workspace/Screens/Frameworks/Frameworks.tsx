@@ -62,7 +62,7 @@ const Frameworks = () => {
   const closeDrawer = () => {
     setDrawerOpen(false);
     setEditingFrameworkId(null);
-    toast.success('Framework saved successfully');
+   
   };
 
   const handleDeleteClick = (id: string) => {
@@ -142,7 +142,9 @@ const Frameworks = () => {
       >
         <FrameworkForm
           onCancel={closeDrawer}
-          onSuccess={closeDrawer}
+          onSuccess={() => {
+            toast.success('Framework saved successfully');
+            closeDrawer()}}
           frameworkId={editingFrameworkId ?? undefined}
         />
       </Drawer>

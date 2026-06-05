@@ -64,7 +64,7 @@ export default function HowItWorks() {
   };
 
   return (
-    <section id="how-it-works" className="py-20 bg-section  dot-pattern overflow-hidden ">
+    <section id="how-it-works" className="pt-20 sm:py-20 bg-section  dot-pattern overflow-hidden ">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         
         {/* Section Header */}
@@ -106,7 +106,7 @@ export default function HowItWorks() {
                 </div>
 
         {/* 3 Step Instructions */}
-        <div className="flex flex-col md:flex-row justify-center gap-8 md:gap-12 items-start mb-16 relative">
+        <div className="flex flex-col md:flex-row justify-center gap-8 md:gap-12 items-center mb-16 relative">
           {/* Subtle connecting lines on desktop */}
           <div className="hidden md:block absolute top-12 left-1/4 right-1/4 h-[1px] bg-outline-variant/10 -z-10"></div>
           
@@ -367,7 +367,7 @@ export default function HowItWorks() {
         </div>
 
         {/* Dynamic Secondary Image Card */}
-        <div className="rounded-2xl overflow-hidden shadow-2xl border border-outline-variant/10 bg-[#16133c]">
+        <div className="hidden sm:block rounded-2xl overflow-hidden shadow-2xl border border-outline-variant/10 bg-[#16133c]">
           <img
             alt="Interface showing a split screen comparison of a rough draft versus polished AI output"
             className="w-full h-auto object-cover opacity-85"
