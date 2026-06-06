@@ -28,6 +28,7 @@ const navToPath: Record<NavItem, string> = {
 };
 
 export default function Workspace() {
+  
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -36,9 +37,11 @@ export default function Workspace() {
   const setUser = useAuthStore((state) => state.setUser);
 
   useEffect(() => {
+   
     if (user) {
       setUser(user);
     }
+  
   }, [user, setUser]);
 
   // Get current active nav from URL
@@ -51,14 +54,12 @@ export default function Workspace() {
     if (path === "settings") return "Settings";
     return "Polish"; // default
   };
-const activeNav = getActiveNavFromPath();
+  const activeNav = getActiveNavFromPath();
 
-const handleNavChange = (item: NavItem) => {
-  navigate(`/workspace/${navToPath[item]}`);
-  setSidebarOpen(false);
-};
-
-  
+  const handleNavChange = (item: NavItem) => {
+    navigate(`/workspace/${navToPath[item]}`);
+    setSidebarOpen(false);
+  };
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#111110] font-sans">

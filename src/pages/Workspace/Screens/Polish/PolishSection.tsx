@@ -140,7 +140,6 @@ export default function PolishSection() {
   };
 
   const selectedFramework = frameworks.find((f) => f.id === selectedFrameworkId);
-  console.log("frameworks", frameworks);
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden h-full">

@@ -1,8 +1,7 @@
-
 import { Sparkles, ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import AuthFormInput from "../../../shared/components/auth/input";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { login } from "../services/auth.service";
 import { loginSchema, type TLoginFormData } from "../schemas/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,28 +9,26 @@ import { useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../../../services/api/endPoints";
 import toast from "react-hot-toast";
 
-
 export default function LoginForm() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const queryClient =useQueryClient();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<TLoginFormData>({
-    resolver: zodResolver(loginSchema),     // ← Connect Zod
+    resolver: zodResolver(loginSchema), // ← Connect Zod
     mode: "onChange",
   });
 
-
-   // TanStack Query Mutation
+  // TanStack Query Mutation
   const loginMutation = useMutation({
     mutationFn: login,
-   onSuccess: (data) => {
+    onSuccess: (data) => {
       console.log("Login successful:", data);
       const userData = data.data;
-      // ✅ Save tokens to localStorage
-      console.log("userData", userData);
+
       if (userData?.accessToken) {
         localStorage.setItem("accessToken", userData.accessToken);
       }
@@ -44,24 +41,25 @@ export default function LoginForm() {
         localStorage.setItem("user", JSON.stringify(userData.user));
       }
 
-      reset(); 
-toast.success("Login successful");
+      reset();
+      toast.success("Login successful");
       // Redirect to dashboard (or home)
+       queryClient.invalidateQueries({ queryKey: ['current-user'] });
       navigate(API_ENDPOINTS.WORKSPACE); // Change this to your actual dashboard route
     },
     onError: (error: any) => {
       console.error("login failed:", error);
-      if(error?.response?.status === 401) {toast.error("Please check your email and password");}
+      if (error?.response?.status === 401) {
+        toast.error("Please check your email and password");
+      }
       toast.error(error?.response?.data?.message || "Login failed");
     },
   });
 
-
   const handleloginSubmit = (data: TLoginFormData) => {
-    loginMutation.mutate({  
+    loginMutation.mutate({
       email: data.email,
       password: data.password,
-     
     });
   };
 
@@ -146,7 +144,7 @@ toast.success("Login successful");
                       Sign In
                     </h2>
                     <p className="mt-4 text-white/45 text-sm leading-relaxed">
-                     Continue your writing workflow with AI-powered assistance.
+                      Continue your writing workflow with AI-powered assistance.
                     </p>
                   </div>
 
@@ -169,27 +167,31 @@ toast.success("Login successful");
                       name="password"
                       register={register}
                       placeholder="Min. 8 characters"
-                      error={errors.password}                     
+                      error={errors.password}
                     />
 
                     {/* BUTTON */}
-                   <button
-          type="submit"
-          disabled={loginMutation.isPending}
-          className="w-full h-14 rounded-2xl bg-white text-black font-semibold text-sm 
+                    <button
+                      type="submit"
+                      disabled={loginMutation.isPending}
+                      className="w-full h-14 rounded-2xl bg-white text-black font-semibold text-sm 
                      transition-all hover:scale-[1.01] active:scale-[0.99] 
                      disabled:opacity-50 disabled:cursor-not-allowed hover:cursor-pointer"
-        >
-          {loginMutation.isPending ?  "Authenticating..." : "Sign In"}
-        </button>
+                    >
+                      {loginMutation.isPending
+                        ? "Authenticating..."
+                        : "Sign In"}
+                    </button>
                   </form>
 
                   <div className="mt-8 text-center">
                     <p className="text-sm text-white/40">
-                       Don't have an account?{" "}
+                      Don't have an account?{" "}
                       <button
                         type="button"
-                        onClick={() => {navigate(API_ENDPOINTS.AUTH.REGISTER)}}
+                        onClick={() => {
+                          navigate(API_ENDPOINTS.AUTH.REGISTER);
+                        }}
                         className="text-white hover:text-[#14b8a6]"
                       >
                         Sign Up

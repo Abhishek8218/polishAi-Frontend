@@ -3,21 +3,15 @@ import { Play, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 import LottieLib from 'lottie-react';
 import heroAnimation from "../../../assets/polishHero.json";
+import { useNavigate } from "react-router-dom";
+import { API_ENDPOINTS } from "../../../services/api/endPoints";
 
 const Lottie = (LottieLib as any).default ?? LottieLib;
 
-interface HeroProps {
-  onSwitchView?: (view: "landing" | "login" | "signup" | "forgot_password") => void;
-}
 
-export default function Hero({ onSwitchView }: HeroProps) {
-  const handleSignUpClick = () => {
-    if (onSwitchView) {
-      onSwitchView("signup");
-    } else {
-      window.location.hash = "#signup";
-    }
-  };
+export default function Hero() {
+const navigate = useNavigate();
+
 
   const handleScrollToPlayground = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -55,7 +49,7 @@ export default function Hero({ onSwitchView }: HeroProps) {
           {/* ✅ fix 3: full-width buttons on mobile */}
           <div className="flex flex-col sm:flex-row flex-wrap gap-4 pt-2">
             <button
-              onClick={handleSignUpClick}
+              onClick={()=> {navigate(API_ENDPOINTS.AUTH.LOGIN)}}
               className="w-full sm:w-auto bg-secondary-teal text-white hover:bg-[#004d46] px-8 py-3.5 rounded-lg font-sans font-semibold text-sm hover:shadow-lg hover:shadow-secondary-teal/20 hover:-translate-y-0.5 transition-all active:translate-y-0 cursor-pointer"
             >
               Start for Free

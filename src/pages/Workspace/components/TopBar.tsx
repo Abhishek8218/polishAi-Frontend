@@ -70,14 +70,15 @@ const profileOptions: DropdownOption[] = [
 export default function TopBar({ onMenuToggle }: TopBarProps) {
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const user =  useAuthStore(state => state.user);
+  const {user: user, clearUser} =  useAuthStore();
   // TanStack Query Mutation
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSuccess: (data) => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      localStorage.removeItem("user");      
+      localStorage.removeItem("user");
+      clearUser();      
       navigate(API_ENDPOINTS.AUTH.LOGIN);  
     },
     onError: (error: any) => {
@@ -98,22 +99,33 @@ export default function TopBar({ onMenuToggle }: TopBarProps) {
 
 const handleLogoutConfirm = () => {
   logoutMutation.mutate();
+ 
   setShowLogoutModal(false);
 };
 
   return (
     <header className="flex items-center justify-between h-14 px-5 lg:px-8 bg-[#18181a] border-b border-[#2a2a2e] shrink-0 z-10">
-      <div className="flex items-center gap-3">
-        {/* Mobile hamburger */}
-        <button
-          onClick={onMenuToggle}
-          className="lg:hidden text-[#6b6b7e] hover:text-white transition-colors p-1 -ml-1"
-          aria-label="Toggle sidebar"
-        >
-          <MenuIcon />
-        </button>
-        
-      </div>
+     <div className="flex items-center gap-3">
+  {/* Mobile hamburger */}
+  <button
+    onClick={onMenuToggle}
+    className="lg:hidden text-[#6b6b7e] hover:text-white transition-colors p-1 -ml-1"
+    aria-label="Toggle sidebar"
+  >
+    <MenuIcon />
+  </button>
+
+  {/* Free tier notice */}
+  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#2a2420] border border-[#5a3e28]/60">
+    <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b] shrink-0" />
+    <span className="text-[11px] font-medium tracking-wide text-[#d4a574] whitespace-nowrap hidden sm:inline">
+      Free tier — things might be a bit slow
+    </span>
+    <span className="text-[11px] font-medium text-[#d4a574] sm:hidden">
+      Free tier — things might be a bit slow
+    </span>
+  </div>
+</div>
 
       <div className="flex items-center gap-4">
         {/* Credits badge */}
